@@ -13,6 +13,7 @@ import { IoIosArrowDropright, IoIosArrowDropleft } from "react-icons/io";
 
 const CardContainer = styled(motion.div)`
   width: 285px;
+  min-width: 280px;
   height: 500px;
   display: flex;
   flex-direction: column;
