@@ -41,7 +41,7 @@ const Shoes = styled(motion.div)`
   }
 `;
 
-export function NikeCard() {
+export function PokeCard() {
   const [allPokemons, setAllPokemons] = useState([]);
   const [color, setColor] = useState("grey");
   const [loading, setLoading] = useState(true);
@@ -50,7 +50,7 @@ export function NikeCard() {
   function handlerClick(e) {
     e === "right"
       ? setNumeroDePokemon(numeroDePokemon + 1)
-      : setNumeroDePokemon(numeroDePokemon - 1);
+      : setNumeroDePokemon(numeroDePokemon - 1 === 0 ? 1 : numeroDePokemon - 1);
     // console.log(numeroDePokemon);
   }
 

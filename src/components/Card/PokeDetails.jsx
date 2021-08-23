@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Marginer } from "../marginer";
+import Swal from "sweetalert2";
 
 // import NikeImg from "../../assets/images/nike-logo.png";
 // import { BsFillAspectRatioFill } from "react-icons/bs";
@@ -71,6 +72,19 @@ const CajonBajo = styled.div`
 `;
 
 export function PokeDetails({ pokeData }) {
+  function handlerClick() {
+    console.log(pokeData);
+
+    Swal.fire({
+      title: `#0${pokeData.id} ${pokeData.name}`,
+      text: "Modal with a custom image.",
+      imageUrl: pokeData.sprites.other.dream_world.front_default,
+      imageWidth: 400,
+      imageHeight: 200,
+      imageAlt: "Custom image",
+    });
+  }
+
   let tipos = pokeData.types.map((el) => el.type.name).join(" - ");
 
   return (
@@ -92,7 +106,7 @@ export function PokeDetails({ pokeData }) {
           <MediumText>-</MediumText>
         )}
 
-        <BuyButton>See +</BuyButton>
+        <BuyButton onClick={() => handlerClick()}>See +</BuyButton>
       </SpacedHorizontalContainer>
       <CajonBajo>
         {/*PONER LAS EVOLUCIONES ACA*/}
