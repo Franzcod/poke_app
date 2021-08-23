@@ -63,25 +63,24 @@ export function PokeCard() {
     }
   }
 
-  const getPokemon = async () => {
-    const res = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${numeroDePokemon}`
-    );
-
-    const data = await res.json();
-    let numero = data.id;
-    setNumeroDePokemon(numero);
-
-    let colorin = colorType(data.types[0].type.name);
-
-    setColor(colorin);
-
-    setAllPokemons(data);
-
-    setLoading(false);
-  };
-
   useEffect(() => {
+    const getPokemon = async () => {
+      const res = await fetch(
+        `https://pokeapi.co/api/v2/pokemon/${numeroDePokemon}`
+      );
+
+      const data = await res.json();
+      let numero = data.id;
+      setNumeroDePokemon(numero);
+
+      let colorin = colorType(data.types[0].type.name);
+
+      setColor(colorin);
+
+      setAllPokemons(data);
+
+      setLoading(false);
+    };
     getPokemon();
   }, [numeroDePokemon]); // eslint-disable-next-line
 
