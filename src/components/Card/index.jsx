@@ -45,7 +45,8 @@ export function PokeCard() {
   const [allPokemons, setAllPokemons] = useState([]);
   const [color, setColor] = useState("grey");
   const [loading, setLoading] = useState(true);
-  const [numeroDePokemon, setNumeroDePokemon] = useState(1);
+  let nroRandom = Math.floor(Math.random() * (1 + 898));
+  const [numeroDePokemon, setNumeroDePokemon] = useState(nroRandom);
 
   function handlerClick(e) {
     e === "right"
@@ -54,12 +55,22 @@ export function PokeCard() {
     // console.log(numeroDePokemon);
   }
 
+  function searchByInput(e) {
+    if (Number(e)) {
+      setNumeroDePokemon(Number(e));
+    } else {
+      setNumeroDePokemon(e);
+    }
+  }
+
   const getPokemon = async () => {
     const res = await fetch(
       `https://pokeapi.co/api/v2/pokemon/${numeroDePokemon}`
     );
+
     const data = await res.json();
-    // console.log(data);
+    let numero = data.id;
+    setNumeroDePokemon(numero);
 
     let colorin = colorType(data.types[0].type.name);
 
@@ -80,58 +91,83 @@ export function PokeCard() {
   const rotateY = useTransform(x, [-100, 100], [-30, 30]);
 
   return (
-    <div className={styles.CardWrapper}>
-      <IoIosArrowDropleft
-        className={styles.arowButton}
-        onClick={() => handlerClick("left")}
-      />
+    <div className={styles.divRey}>
+      <div className={styles.divBuscador}>
+        <input
+          type="text"
+          name="search"
+          placeholder="Search by name or number..."
+          className={styles.input}
+          // onChange={(e) => searchByInput(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              searchByInput(e.target.value);
+              e.target.value = "";
+            }
+          }}
+        />
+      </div>
+      <div className={styles.CardWrapper}>
+        <IoIosArrowDropleft
+          className={styles.arowButton}
+          onClick={() => handlerClick("left")}
+        />
 
-      <CardContainer
-        style={{ x, y, rotateX, rotateY, z: 100 }}
-        drag
-        dragElastic={0.16}
-        dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
-        whileTap={{ cursor: "grabbing" }}
-      >
-        <div className={styles.TopContainer}>
-          <div className={styles.CircleWrapper}>
-            <div className={styles.Circle} style={{ backgroundColor: color }} />
+        <CardContainer
+          style={{ x, y, rotateX, rotateY, z: 100 }}
+          drag
+          dragElastic={0.16}
+          dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
+          whileTap={{ cursor: "grabbing" }}
+        >
+          <div className={styles.TopContainer}>
+            <div className={styles.CircleWrapper}>
+              <div
+                className={styles.Circle}
+                style={{ backgroundColor: color }}
+              />
+            </div>
+            <div className={styles.Wrapper}>
+              <Shoes
+                style={{ x, y, rotateX, rotateY, rotate: "-5deg", z: 100000 }}
+                drag
+                dragElastic={0.12}
+                whileTap={{ cursor: "grabbing" }}
+              >
+                {loading ? (
+                  <img src={imgLoading} alt="img pokemon" />
+                ) : (
+                  <img
+                    src={
+                      allPokemons.sprites.other.dream_world.front_default ===
+                      null
+                        ? allPokemons.sprites.front_default
+                        : allPokemons.sprites.other.dream_world.front_default
+                    }
+                    alt="img pokemon"
+                  />
+                )}
+              </Shoes>
+            </div>
+            {loading ? (
+              <p>Cargando...</p>
+            ) : (
+              <div className={styles.Text_1}>{allPokemons.name}</div>
+            )}
           </div>
-          <div className={styles.Wrapper}>
-            <Shoes
-              style={{ x, y, rotateX, rotateY, rotate: "-5deg", z: 100000 }}
-              drag
-              dragElastic={0.12}
-              whileTap={{ cursor: "grabbing" }}
-            >
-              {loading ? (
-                <img src={imgLoading} alt="img pokemon" />
-              ) : (
-                <img
-                  src={allPokemons.sprites.other.dream_world.front_default}
-                  alt="img pokemon"
-                />
-              )}
-            </Shoes>
+          <div className={styles.BottomContainer}>
+            {loading ? (
+              <p>Cargando...</p>
+            ) : (
+              <PokeDetails pokeData={allPokemons} />
+            )}
           </div>
-          {loading ? (
-            <p>Cargando...</p>
-          ) : (
-            <div className={styles.Text_1}>{allPokemons.name}</div>
-          )}
-        </div>
-        <div className={styles.BottomContainer}>
-          {loading ? (
-            <p>Cargando...</p>
-          ) : (
-            <PokeDetails pokeData={allPokemons} />
-          )}
-        </div>
-      </CardContainer>
-      <IoIosArrowDropright
-        className={styles.arowButton}
-        onClick={() => handlerClick("right")}
-      />
+        </CardContainer>
+        <IoIosArrowDropright
+          className={styles.arowButton}
+          onClick={() => handlerClick("right")}
+        />
+      </div>
     </div>
   );
 }
