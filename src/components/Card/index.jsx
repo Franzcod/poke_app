@@ -9,7 +9,11 @@ import { PokeDetails } from "./PokeDetails";
 import colorType from "../../utils.js";
 import styles from "./index.module.css";
 
-import { IoIosArrowDropright, IoIosArrowDropleft } from "react-icons/io";
+import {
+  IoIosArrowDropright,
+  IoIosArrowDropleft,
+  IoMdCheckbox,
+} from "react-icons/io";
 
 const CardContainer = styled(motion.div)`
   width: 285px;
@@ -64,6 +68,11 @@ export function PokeCard() {
     }
   }
 
+  function submiteado() {
+    let el = document.getElementById("input_1");
+    searchByInput(el.value);
+  }
+
   useEffect(() => {
     const getPokemon = async () => {
       const res = await fetch(
@@ -94,16 +103,23 @@ export function PokeCard() {
     <div className={styles.divRey}>
       <div className={styles.divBuscador}>
         <input
+          id="input_1"
           type="text"
-          name="search"
+          // name="search"
           placeholder="Search by name or number..."
           className={styles.input}
-          // onChange={(e) => searchByInput(e.target.value)}
+          // onChange={(e) => setNumeroDePokemon(e.target.value)}
           onKeyPress={(e) => {
             if (e.key === "Enter") {
               searchByInput(e.target.value);
               e.target.value = "";
             }
+          }}
+        />
+        <IoMdCheckbox
+          className={styles.iconEnter}
+          onClick={() => {
+            submiteado();
           }}
         />
       </div>
